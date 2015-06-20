@@ -1,9 +1,12 @@
 #!/usr/bin/python
 
-# Author : Dave Levy  Date : 16 June 2015   Version 1.2
+# Author : Dave Levy  Date : 16 June 2015   Version 1.3
 #
 # This program consumes an ello .json file and writes a poor rss file.
 # The file name is defined on the command line, the output file is stdout
+#
+# V1.3 20 June 2015 - default file bug removed
+# V1.2 19 June 2015 - cli options added
 #
 
 import json, re, sys, getopt, os.path
@@ -54,9 +57,6 @@ print printline('description','dave levy\'s posts at ello.co')
 print printline('link','http://ello.co/davelevy')
 print printline('lastBuildDate',pubdate)
 print printline('pubDate',pubdate)
-
-with open('ello.json') as data_file:
-	myfeed = json.load(data_file)
 
 def chompw(words,limit=12):
 	space=" " ; i=""    # constants
