@@ -1,10 +1,11 @@
 #!/usr/bin/python
 
-# Author : Dave Levy  Date : 16 June 2015   Version 1.3
+# Author : Dave Levy  Date : 16 June 2015   Version 1.4
 #
 # This program consumes an ello .json file and writes a poor rss file.
 # The file name is defined on the command line, the output file is stdout
 #
+# V1.4 08 Aug  2015 - unicode inserted, chompw default := 25
 # V1.3 20 June 2015 - default file bug removed
 # V1.2 19 June 2015 - cli options added
 #
@@ -58,7 +59,7 @@ print printline('link','http://ello.co/davelevy')
 print printline('lastBuildDate',pubdate)
 print printline('pubDate',pubdate)
 
-def chompw(words,limit=12):
+def chompw(words,limit=25):
 	space=" " ; i=""    # constants
 	# procedure
 	L=words.split()
@@ -99,10 +100,17 @@ for element in myposts:
 					# also needs to ensure that break is not in the middle of a tag pair
 					O={'title': chompw(T), 'desc': T[0:256]}
 					# next line needs an error trap
-					print ' ' * 12  + '    <%s>%s<%s>' % ( 'title', O['title'], '/title' )
-					print padline(12)  + '    <%s>%s<%s>' % ( 'description', O['desc'], '/description' )
+					try:
+						print ' ' * 16  + '<%s>%s<%s>' % ( 'title', O['title'], '/title' )
+					except UnicodeEncodeError:
+						print ' ' * 16  + '<%s>%s<%s>' % ( 'title', O['title'].encode('utf-8'), '/title' )
+					try:
+						print padline(16)  + '<%s>%s<%s>' % ( 'description', O['desc'], '/description' )
+					except UnicodeEncodeError:
+						print padline(16)  + '<%s>%s<%s>' % ( 'description', O['desc'].encode('utf-8'), '/description' )
+						#print '%s %s' % ( 'encode :', O['desc'].encode('utf-8'))
 		else:
-			print padline(12)  + '    <%s>%s<%s>' % (maps[property], element[property], emaps[property])
+			print padline(16)  + '<%s>%s<%s>' % (maps[property], element[property], emaps[property])
 	print padline(8) + '</item>'
 
 print '</channel>'
